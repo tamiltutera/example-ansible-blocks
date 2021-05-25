@@ -1,0 +1,33 @@
+---
+# YAML documents begin with the document separator ---
+# The minus in YAML this indicates a list item. The Playbook contains a list
+# of plays, with each play being a dictionary
+
+- 
+  # Target: where our play will run and options it will run with
+  hosts: all
+
+  # Task: the list of tasks that will be executed within the playbook
+  tasks:       
+     - name: A block of modules being executed 
+       block:
+         - name: Install patch
+           package:
+             name: patch
+         - name: Install python-dnspython
+           package:
+             name: python-dnspython
+       rescue:
+         - name: Rollback patch
+           package:
+             name: patch
+             state: absent
+         - name: Rollbak python-dnspython
+           package:
+             name: python-dnspython
+             state: absent
+       always:
+         - debug:
+             msg: This always run, regardless
+# Three dots indicate the end of a YAML document
+...
